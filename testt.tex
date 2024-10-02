@@ -1,0 +1,368 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage[utf8]{vietnam}
+\usepackage{hyperref}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{subfigure}
+
+
+\pagenumbering{roman}
+
+\title{voanhkhoi-20225870}
+\author{khoi.va225870 }
+\date{\today}
+
+\begin{document}
+
+\begin{center}
+
+{\textbf{\large{ĐẠI HỌC BÁCH KHOA HÀ NỘI}}}\\[3cm]
+
+{\textbf{\Large{GMM FOR EMOTION RECOGNITION OF VIETNAMESE}}\\[1cm]
+
+{\textbf{\large{NGUYỄN VĂN A}}}\\
+{\large{nguyenvanabc@sis.hust.edu.vn}}\\[0.5cm]
+
+{\textbf{\large{Ngành Công nghệ thông tin và truyền thông}}}\\
+
+\vspace{2cm}
+% Please add the following required packages to your document preamble:
+% \usepackage{graphicx}
+\begin{table}[h]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{ll}
+\multicolumn{1}{c}{\textbf{Giảng viên hướng dẫn:}} & PGS. TS. Phạm Văn ABC \hspace{0.5cm} \underline{\hspace{3cm}}  \\[0.5cm]
+  & \multicolumn{1}{r}{Chữ kí GVHD}     \\[0.5cm]
+\textbf{Khoa:} & Kỹ thuật máy tính                 \\[0.5cm]
+\textbf{Trường:} & Công nghệ Thông tin và Truyền thông \\[5cm]
+\multicolumn{2}{c}{\textbf{HÀ NỘI, 06/2022}}                                            
+\end{tabular}%
+}
+\end{table}}
+\end{center}
+\tableofcontents
+\listoftables
+\listoffigures
+
+\begin{abstract}
+    This paper presents the results of GMM-based recognition for four basic emotions of
+Vietnamese such as neutral, sadness, anger and happiness. The characteristic parameters of these
+emotions are extracted from speech signals and divided into different parameter sets for experiments.
+The experiments are carried out according to speaker-dependent or speaker-independent and content-dependent or content-independent recognitions. The results showed that the recognition scores are
+rather high with the case for which there is a full combination of parameters as MFCC and its first
+and second derivatives, fundamental frequency, energy, formants and its correspondent bandwidths,
+spectral characteristics and F0 variants. In average, the speaker-dependent and content-dependent
+recognition scrore is 89.21\%. Next, the average score is 82.27\% for the speaker-dependent and contentindependent recognition. For the speaker-independent and content-dependent recognition, the average score is 70.35\%. The average score is 66.99\% for speaker-independent and content-independent
+recognition. Information on F0 has significantly increased the score of recognition.
+
+\end{abstract}
+\section{Introduction}
+Recognition of emotional speech has been of interest to researchers because it is particularly useful for applications that require a natural interaction between man and machine.
+There are many studies on recognition of emotional speech available in a number of different languages around the world such as English, German, Chinese, French, Spanish,. . . \cite{1}.
+The majority of these studies use speech features in four categories \cite{1}: continuous features
+(pitch, energy, formant), voice quality features (easy or hard listening, stress level, breathing
+level), spectral features LPC (Linear Prediction Coding), MFCC (Mel Frequency Cepstral
+Coefficients), LFPC (Log-frequency power coefficients)), TEO features (TEO-Teager-energyoperator) proposed by Teager (TEO-FM-Var (TEO-decomposed FM variation), TEO-AutoEnv (normalized TEO autocorrelation envelope area), TEO-CB-Auto-Env (critical bandbased TEO autocorrelation envelope area)). At present, the study of emotional Vietnamese
+is mainly done in terms of language \cite{2}. In terms of signal processing, there are very few
+studies on emotional Vietnamese. A number of studies on emotional Vietnamese have been
+published, often in multi-modal corpus, combining facial expressions, gestures, and voices
+with major applications for synthesis of Vietnamese. For example, the study in \cite{3,4} tested
+the modeling of Vietnamese prosody with multi-modal corpus to synthesize Vietnamese with
+emotion. The authors in \cite{5} used SVM (Support Vector Machines) for classification with the
+inputs as brain electrical signals and the results showed that real-time recognition is possible with five states of emotion and the average accuracy is 70.5\%. In addition, there are few
+studies of emotional Vietnamese that are performed abroad and not primarily by Vietnamese
+\cite{6,7}. The corpus of \cite{6} contains two male voices and two female voices with six sentences for six emotions: happiness, neutrality, sadness, surprise, anger, and fear. The GMM (Gaussian
+Mixture Model) model was used with the characteristic parameters such as MFCC, shortterm energy, pitch, formants. The highest recognition score is 96.5\% for neutrality and the
+lowest is 76.5\% for sadness. The corpus for \cite{7} consists of 6 voices with 20 sentences and
+the emotions as in \cite{6}. In \cite{7}, the recognition score on Vietnamese language using Im-SFLA
+(Improved Shuffled Frog Leaping Algorithm) SVM (Support Vector Machine) reaches 96.5\%
+for neutrality and has dropped to 84.1\% for surprise.
+For speech emotion recognition, one can use models such as HMM (Hidden Markov
+Model), GMM \cite{1,6,19}, SVM \cite{1,7}, ANN (Artificial Neural Network), KNN (K-Nearest
+Neighbors) and some other classifiers \cite{1}. In fact, no classifier is the most suitable for
+emotional recognition. Because each classifier has its own advantages and disadvantages.
+Nevertheless, GMM is a model that is appropriate for emotion recognition as this is a model
+that targets the information envelope rather than the detailed content of the information.
+As it can be seen later in Section 3 of this paper, among the three sets of parameters for
+determining a GMM model, there are two sets of parameters directly related to the average:
+mean vectors and covariance matrices. According to \cite{7,18}, the GMM model is a popular
+and promising model for speech emotion recognition. For the research on this paper, the
+experiments with GMM were performed on different corpora and different parameters.
+\\
+The paper consists of 5 sections. Section 2 shows the characteristic parameters and the
+corpora used for experiments. Section 3 gives an overview of the GMM model. The experiment results using the GMM model with the specific parameters for Vietnamese emotion
+recognition are given in Section 4. Finally, Section 5 is conclusion.
+
+\section{CORPORA AND CHARACTERISTIC PARAMETERS FOR EXPERIMENTS ON EMOTION RECOGNITION}
+\subsection{ Corpora for experiments}
+The corpus of emotional Vietnamese used for the experiments in this paper included 5584
+files of the corpus BKEmo \cite{8} with four emotions: neutral, sadness, anger and happiness
+being spoken by 8 male and 8 female voices. The authors of this paper have performed
+listening to remove the error files or the files that did not express well emotions, so the
+remaining files are 5584 files with 22 sentences of different. Among these sentences, there are
+short, long, exclamation sentences such as “Got a salary”, “Oh, that person can not change
+that” to analyze the characteristic parameters of emotions. Each sentence is pronounced
+four times. The number of wave files for each male and female voice is 2792 files, each
+emotion has 698 files. The ages of artists participating in emotion pronouncing are from 20-
+58. The voice is recorded with sampling frequency 16 kHz, 16 bits/sample. The recording is
+conducted in dubbing studio. This corpus used to recognize emotions of Vietnamese for the
+four experiment cases is shown in Table 1.
+\\
+ For the corpus Test1, the training and testing corpus have the same content and the
+same speakers and sentences with the same content are pronounced at different times. For
+the corpus Test2, the training and testing corpus have the same speakers but 22 sentences
+are divided into two parts, the contents of the 11 sentences used for the training and the
+remaining used for testing. For the corpus Test3, the number of speakers is divided into two
+parts. For the corpus Test4, number of sentences and number of speakers are divided by 2.
+
+\begin{table}[h]
+\caption{Vietnamese emotional corpus for experiments with GMM model}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|l|l|l|l|l|}
+\hline
+\textbf{Corpus} & \textbf{Experiment Corpus}                  & \textbf{\begin{tabular}[c]{@{}l@{}}Total \\ Number\\ of Files\end{tabular}} & \textbf{\begin{tabular}[c]{@{}l@{}}Number of\\ Training \\ Files\end{tabular}} & \textbf{\begin{tabular}[c]{@{}l@{}}Number \\ of Testing \\ Files\end{tabular}} \\ \hline
+Test1           & Speaker-dependent and content-dependent     & 5584                                                                        & 2792                                                                           & 2792                                                                           \\ \hline
+Test2           & Speaker-dependent and content-independent   & 5584                                                                        & 2793                                                                           & 2791                                                                           \\ \hline
+Test3           & Speaker-independent and content-dependent   & 5584                                                                        & 2794                                                                           & 2790                                                                           \\ \hline
+Test4           & Speaker-independent and content-independent & 2803                                                                        & 1403                                                                           & 1422                                                                           \\ \hline
+\end{tabular}
+}
+\end{table}
+\subsection{Characteristic parameters}
+The characteristic parameters used for the experiments include 87 parameters as shown
+in Table 2. These parameters were extracted from the speech signals in the corpus using
+Praat1 and Alize toolkits \cite{9}. Formants and its correspondent bandwidths are determined
+by Praat and based on LPC. Fundamental frequency F0 is calculated by Praat and based on
+cross-correlation analysis. The range for determining F0 depends on the gender. For female
+voices, the maximum F0 value is 350 Hz, and this value is 200 Hz for male voices
+\\
+In Table 2, according to Praat harmonicity represents the degree of acoustic periodicity
+also known as the Harmonics-to-Noise Ratio (HNR) and can be used as a measure for voice
+quality. If S (f) is complex spectrum, where f is the frequency, the centre of gravity is given
+by formula
+\begin{equation}
+\frac{\int_0^{\infty} f|S(f)|^p d f}{\int_0^{\infty}|S(f)|^p d f}
+\end{equation}
+where $\int_0^{\infty}|S(f)|^p d f$ is energy. So, the centre of gravity is the average of frequency f over the entire frequency domain, weighted by $|S(f)|^p$. For p = 2, the weighting is done by the power
+spectrum, and for $p = 1$, the weighting is done by the absolute spectrum. The commonly
+used value is $p = 2/3$. If $S (f)$ is a complex spectrum, the $n^{th}$
+central moment is given by (2)
+where $f_c$ is the spectral centre of gravity
+\begin{equation}
+\frac{\int_0^{\infty}\left(f-f_c\right)^n|S(f)|^p d f}{\int_0^{\infty}|S(f)|^p d f}
+\end{equation}
+The $n^{th}$ central moment is the average of $(f-f_c)^n$ over the entire frequency domain,
+weighted by $|S(f)|^p$ Moment is related to $n^{th}$ order in formula (2). If $n = 2$ we have the
+variance of the frequencies in the spectrum. Frequency standard deviation is the square root
+of this variance.
+\\
+If $n = 3$ we will have the third-order central moment, which is also the non-normalized
+skewness of the spectrum. Skewness indicates the deviation of the dataset relative to the
+standard distribution, if the deviation is below the mean, the data is more concentrated than
+that when the deviation is above the mean. The higher the absolute value of skewness is,
+the more unbalanced the distribution is. A symmetric distribution will have a skewness of
+0.
+\\
+With $n = 4$, we have the kurtosis of the non-normalized spectrum. For normalization,
+divide by the square of the second central moment and subtract 3. Kurtosis is an index
+to evaluate the shape characteristics of a probability distribution. Specifically, kurtosis
+compares the central portion of a distribution to its normal distribution. The greater and
+the sharper the center of the distribution is, the greater the kurtosis of the distribution is.
+The kurtosis of the normal distribution is equal to 3.
+\begin{table}[h]
+\caption{The characteristic parameters for the Vietnamese emotional corpus}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Index} & \textbf{Characteristic parameters}                                       & \textbf{\begin{tabular}[c]{@{}l@{}}Number of \\ parameters\end{tabular}} \\ \hline
+(1)            & \textit{MFCC}                                                            & 19                                                                       \\ \hline
+(2)            & \textit{The 1 st-order derivatives of MFCC}                              & 19                                                                       \\ \hline
+(3)            & \textit{The 2 nd-order derivatives of MFCC}                              & 19                                                                       \\ \hline
+(4)            & \textit{Energy, the 1 st-order and the 2 nd-order derivatives of energy} & 3                                                                        \\ \hline
+(5)            & \textit{Fundamental frequency F0}                                        & 1                                                                        \\ \hline
+(6)            & \textit{Speech intensity}                                                & 1                                                                        \\ \hline
+(7)            & \textit{Formants and its correspondent bandwidths}                       & 8                                                                        \\ \hline
+(8)            & \textit{Harmonicity}                                                     & 1                                                                        \\ \hline
+(9)            & \textit{Centre of gravity}                                               & 1                                                                        \\ \hline
+(10)           & \textit{Central moment}                                                  & 1                                                                        \\ \hline
+(11)           & \textit{Skewness}                                                        & 1                                                                        \\ \hline
+(12)           & \textit{Kurtosis}                                                        & 1                                                                        \\ \hline
+(13)           & \textit{Frequency standard deviation}                                    & 1                                                                        \\ \hline
+(14)           & \textit{LTAS (Long Term Average Spectrum) mean}                          & 1                                                                        \\ \hline
+(15)           & \textit{Slope and standard deviation of LTAS}                            & 2                                                                        \\ \hline
+(16)           & \textit{difF0(t)}                                                        & 1                                                                        \\ \hline
+(17)           & \textit{F0NormAver(t)}                                                   & 1                                                                        \\ \hline
+(18)           & \textit{F0NormM inMax(t)}                                                & 1                                                                        \\ \hline
+(19)           & \textit{F0NormAverStd(t)}                                                & 1                                                                        \\ \hline
+(20)           & \textit{difLogF0(t)}                                                     & 1                                                                        \\ \hline
+(21)           & \textit{LogF0NormMinMax(t)}                                              & 1                                                                        \\ \hline
+(22)           & \textit{LogF0NormAver(t)}                                                & 1                                                                        \\ \hline
+(23)           & \textit{LogF0NormAverStd(t)}                                             & 1                                                                        \\ \hline
+\end{tabular}
+}
+\end{table}
+The average value of the spectrum is related to the standard deviation of the spectrum 
+\\
+With the classification problem, when a set of values of data tends to be near the average,
+the concentration of data is better than that when the data set tends to be far from the
+average. Thus, the average can be useful to describe the set of values of the correlated data.
+The average of the values $x_1, ..., x_N$ is
+\begin{equation}
+\bar{x}=\frac{1}{N} \sum_{j=1}^N x_j .
+\end{equation}
+The variants of $F0$ shown in Table 1 are as follows
+Derivative of $F0 (difF0 (t))$
+\\
+
+\begin{equation}
+difF0(t)=d F 0(t) / d t \text {. }
+\end{equation}
+Normalization of $F0$ by the average value F0 for each file $(F0NormAver(t))$
+\begin{equation}
+F 0  NormAver (t)=F 0(t) / \overline{F 0(t)}
+\end{equation}
+Normalization of F0 by min value min $F0(t)$ and max value max $F0(t)$ for each file
+$(F0NormMinMax (t))$
+\begin{equation}
+ F0NormMinMax (t)=\frac{F 0(t)-\min F 0(t)}{\max F 0(t)-\min F 0(t)}
+\end{equation}
+Normalization of $F0$ by average and standard deviation of $F0 (F0NormAverStd (t))$
+\begin{equation}
+F 0 NormAverStd (t)=\frac{F 0(t)-\overline{F 0(t)}}{\sigma F 0(t)}
+\end{equation}
+Derivative of $LogF0 (t)$ $(difLogF0 (t))$
+\begin{equation}
+ dif  \log F 0(t)=d \log F 0(t) / d t \text {. }
+\end{equation}
+Normalization of $LogF0 (t)$ by min value min $LogF0 (t)$ and max value max $LogF0 (t) $
+for each file $(LogF0NormM inM ax (t))$
+\begin{equation}
+\log F 0  NormMinMax (t)=\frac{\log F 0(t)-\min \log F 0(t)}{\max \log F 0(t)-\min \log F 0(t)} .
+\end{equation}
+Normalization of $LogF0 (t)$ by average of $LogF0(t)$ for each file $(LogF0NormAver (t))$
+\begin{equation}
+    LogF0NormAver(t) = LogF0(t)/\overline{LogF0(t)}
+\end{equation}
+Normalization of $LogF0 (t)$ by average and standard deviation of $LogF0 (t)$ for each file
+$(LogF0NormAverStd (t))$
+\begin{equation}
+    LogF0NormAverStd (t) = \frac{ LogF0(t)-\overline{LogF0(t)}}{\sigma LogF0(t)}
+\end{equation}
+The characteristic parameters in Table 2 are divided into six sets for experiments as
+shown in Table 3. The reason for using the parameters as in Table 2 and how to divide
+the parameter sets as in Table 3 for emotion recognition of Vietnamese can be explained as follows. Since the MFCC have been proposed \cite{16,17}, these characteristic parameters
+have been used commonly in systems such as speech recognition, speaker recognition, speech
+emotion recognition etc. \cite{1}. Thus, the MFCC are considered as the basic characteristic
+parameters of these systems. One can say that MFCC are the basic parameters related to the
+speech signal spectra which have been condensed and based on the sensibility of the auditory
+system. In addition, the characteristic parameters from (8) to (15) are also parameters
+related to the speech signal spectrum that are statistically determined. In particular, the
+characteristic parameters (11) and (12) are closely related to the standard distribution that
+GMM has used. Vietnamese is a tonal language. F0’s variation rules will determine the
+tones of the Vietnamese. On the other hand, the F0’s variation rules of a word or a sentence
+also contribute to the emotion expression \cite{8}. Therefore, F0 and the parameters from (16)
+to (23) are very closely related to Vietnamese and the emotions of the voice.
+
+\begin{table}[h]
+\caption{ Establishment of characteristic parameter sets used for experiments}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|l|l|l|l|}
+\hline
+\textbf{Set of parameters} & \textbf{Name} & \textbf{\begin{tabular}[c]{@{}l@{}}Characteristic parameters\\  for the indexes in \\ Table 2\end{tabular}} & \textbf{\begin{tabular}[c]{@{}l@{}}Number of \\ parameters\end{tabular}} \\ \hline
+1                          & MFCC          & (1)                                                                                                         & 19                                                                       \\ \hline
+2                          & MFCC+Delta1   & (1), (2)                                                                                                    & 38                                                                       \\ \hline
+3                          & MFCC+Delta12  & From (1) to (3)                                                                                             & 57                                                                       \\ \hline
+4                          & prm60         & From (1) to (4)                                                                                             & 60                                                                       \\ \hline
+5                          & prm79         & From (1) to (15)                                                                                            & 79                                                                       \\ \hline
+6                          & prm87         & From (1) to (23)                                                                                            & 87                                                                       \\ \hline
+\end{tabular}
+}
+\end{table}
+
+\section{VIETNAMESE EMOTIONAL RECOGNITION USING GMM}
+From the statistical aspects of pattern recognition, each class is modeled by probability
+distribution based on available training data. Statistical classifiers have been used in many
+speech recognition applications such as HMM, GMM. The GMM model is a probability
+model for density estimation using a convex combination of multivariate normal distributions.
+GMM can be considered as a special continuous HMM containing only one state \cite{12}. GMM
+is very effective when modeling multimodal distributions and training requirements are far
+less than the requirements of a general continuous HMM. Thus, GMM is preferable to HMM
+for speech emotion recognition as only the general features are extracted from the speech
+used for training. However, GMM can not model the time structure of training data because
+equations for training and recognition are based on the assumption that all vectors are
+independent. In fact, GMM has been used quite commonly for speaker identification \cite{9},
+language identification \cite{10}, dialect recognition \cite{11} or classification of music genres \cite{13}. In the case of emotion recognition, each emotion will be modeled by a GMM model and the set of parameters will be determined through training on the set of learning patterns
+\\
+Suppose that with a statement of the emotion $j$ corresponding to K speech frames, each
+speech frame extracts the feature vector xi with the dimension D. Thus, a statement of emotion $j$ corresponds to the set \textbf{X} containing K feature vectors $X = {x_1, x_2, . . . , x_K}$. Assume
+the feature vectors are consistent with the Gaussian distribution in which the distribution
+is determined by the mean and the deviation from the mean. From there, the distribution
+of the features of emotion $j$. can be modeled by the mixture of Gaussian distributions. The
+mixture model of the Gaussian distribution $\lambda_j$ of emotion $j$ will be the weighted sum of\textit{M}
+component distributions determined by the probability
+
+
+\begin{thebibliography}{20}
+\bibitem{1} Moataz El Ayadi, Mohamed S. Kamel, Fakhri Karray, “Survey on speech emotion recognition:
+Features, classification schemes, and databases”, Pattern Recognition, vol.44, pp. 572–587, 2011.
+\bibitem{2} Do Tien Thang, “Primary examination of Vietnamese intonation”, Ha Noi National University
+Publishing House, 2009.
+\bibitem{3} Dang-Khoa Mac, Eric Castelli, V\'eronique Auberg\'e, “Modeling the prosody of Vietnamese attitudes for expressive speech synthesis”, Workshop of Spoken Languages Technologies for Under resourced Languages (SLTU 2012), Cape Town, South Africa, May 7-9, 2012.
+\bibitem{4}Dang-Khoa Mac, Do-Dat Tran, “Modeling Vietnamese speech prosody: a step-by-step approach
+towards an expressive speech synthesis system ”, \textit{Springer, Trends and Applications in Knowledge Discovery and Data Mining}, vol. 9441, Springer, pp. 273–287, 2015.
+\bibitem{5} Viet Hoang Anh, Manh Ngo Van, Bang Ban Ha, Thang Huynh Quyet, “A real-time model based
+support vector machine for emotion recognition through EEG”, \textit{International Conference on
+Control, Automation and Information Sciences (ICCAIS)}, Ho Chi Minh city, Vietnam, Nov
+26-29, 2012.
+\bibitem{6} La Vutuan, Huang Cheng-Wei, Ha Cheng, Zhao Li, “Emotional feature analysis and recognition
+from vietnamese speech ”, \textit{Journal of Signal Processing}, China, vol.29, no.10, pp 1423–1432,
+Oct 2013.
+\bibitem{7}Jiang Zhipeng, Huang Chengwei, “High-order markov random fields and their applications in
+cross-language speech recognition ”, \textit{Cybernetics and Information Technologies},Sofia, volume
+15, no. 4, pp 50–57, 2015.
+
+\bibitem{8}Le Xuan Thanh, Dao Thi Le Thuy, Trinh Van Loan, Nguyen Hong Quang, “Speech emotions
+and statistical analysis for vietnamese emotion corpus”, \textit{Journal of Vietnam Ministry of Information and Communication}, no. 15 (35), pp 86–98, 2016.
+\bibitem{9}Jean-Franois Bonastre, Fr\'ed\'eric Wils, “Alize, a free toolkit for speaker recognition”, \textit{IEEE
+International Conference}, In ICASSP (1), pp. I 737 – I 740, 2005.
+
+\bibitem{10}Torres-Carrasquillo, P. A., Singer, E., Kohler, M. A., Greene, R. J., Reynolds, D. A., and Deller
+Jr., J. R., “Approaches to language identification using gaussian mixture models and shifted
+delta cepstral features ”, \textit{In Proc. International Conference on Spoken Language Processing
+in Denver}, CO, ISCA, pp. 33-36, 82-92, September, 2002.
+\bibitem{11} Bin MA, Donglai ZHU and Rong TONG, “Chinese dialect identification using tone features
+based on pitch ”, \textit{ICASSP}, pp 1029–1032, 2006.
+\bibitem{12}D. Reynolds, C. Rose, “Robust text-independent speaker identification using Gaussian mixture
+speaker models”, \textit{IEEE Trans, Speech Audio Process}, vol. 3, no. 1, 72–83, 1995
+\bibitem{13}Bacı U., Erzin E., “Boosting Classifiers for Music Genre Classification”, In: Yolum., G\"{u}ng\"{o}r
+T., G\
+"{u}rgen F., \"{O}zturan C. (eds) Computer and Information Sciences – ISCIS, Lecture Notes in "
+Computer Science, vol 3733. Springer, Berlin, Heidelberg, 2005.
+\bibitem{14}J. Bilmes, “A gentle tutorial of the EM algorithm and its application to parameter estimation for
+Gaussian mixture and hidden Markov models”,\textit{ Technical Report TR-97-021. International
+Computer Science Institute (ICSI)}, Berkeley, CA, pp 1–13, 1998.
+
+\bibitem{15} J.-F. Bonastre, F. Wils, and S. Meignier, “Alize, a free toolkit for speaker recognition”, \textit{ICASSP}
+(1), pp. 737 – 740, 2005.
+\bibitem{16}Dao Thi Le Thuy, Trinh Van Loan, Nguyen Hong Quang, Le Xuan Thanh, “Influence of spectral
+features of speech signal on emotion recognition of Vietnamese”, \textit{Fundamental and Applied IT
+Research} (FAIR), pp 36–43, 2017.
+\bibitem{17}P. Mermelstein, “Distance measures for speech recognition, psychological and instrumental,” in
+\textit{Pattern Recognition and Artificial Intelligence}, C. H. Chen, Ed., Academic, New York, pp.
+374–388, 1976.
+
+\bibitem{18} S.B. Davis, and P. Mermelstein, “Comparison of parametric representations for monosyllabic
+word recognition in continuously spoken sentences”, in \textit { IEEE Transactions on Acoustics,
+Speech, and Signal Processing}, vol. 28, no. 4, pp. 357–366, 1980.
+\bibitem{19}Marcel Kockmann, Luka’s”. Burget, Jan “Honza” C”ernocky, “Application of speaker- and
+language identification state-of-the-art techniques for emotion recognition”,\textit{ Speech Communication}, vol. 53, pp 1172–1185, 2011.
+\bibitem{20}R. Subhashree1, G. N. Rathna, “Speech emotion recognition: performance analysis based on
+fused algorithms and gmm modelling ”, \textit{ Indian Journal of Science and Technology}, vol 9(11),
+doi: 10.17485/ijst/2016/v9i11/88460, March 2016.
+
+
+\end{thebibliography}
+\end{document}
